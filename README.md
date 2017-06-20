@@ -1,0 +1,1 @@
+Excel2Calendar: A command line interface for importing events from an excel spreadsheet to Google Calendar
