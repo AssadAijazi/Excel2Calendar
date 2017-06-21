@@ -16,4 +16,18 @@ def make(file_name):
     @return: none (creates new file)
     """
     workbook = Workbook()
-    workbook.save(file_name)
+    try:
+        if valid_name(file_name):
+            workbook.save(file_name + ".xlsx")
+    except NameError as name_error:
+        print str(name_error)
+
+def valid_name(file_name):
+    """determines that that the passed file_name
+    is valid, mainly making sure that it contains
+    no periods to prevent extension issues
+    """
+    if '.' in file_name:
+        raise NameError("Name must not contain periods")
+    else:
+        return True
