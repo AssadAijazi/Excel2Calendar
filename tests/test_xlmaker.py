@@ -3,32 +3,42 @@ import os
 import pytest
 from XL2Cal import xlmaker
 
-NAMES = {"valid": "test", "invalid": "te.st"}
+VALID_NAMES = ["test1", " test 3", "Hello Excel"]
+INVALID_NAMES = ["test.xlsx", "test stuff.csv", ".test."]
+
 
 def teardown_module():
     """Tears down any files that were created"""
-    for name in NAMES.values():
+    for name in VALID_NAMES:
         if os.path.isfile(name + ".xlsx"):
             os.remove(name + ".xlsx")
 
-def test_make():
-    """tests that an excel documents can be created"""
-    xlmaker.make(NAMES["valid"])
-    assert os.path.isfile(NAMES["valid"] + ".xlsx")
-
-def test_make_invalid():
-    """tests that file is not created if invalid name provided"""
-    xlmaker.make(NAMES["invalid"])
-    assert os.path.isfile(NAMES["invalid"] + ".xlsx") is False
+    for name in INVALID_NAMES:
+        if os.path.isfile(name + ".xlsx"):
+            os.remove(name + ".xlsx")
 
 def test_names_with_periods():
     """tests that names with periods are invalid"""
     with pytest.raises(NameError):
-        xlmaker.valid_name("test.xlsx")
-        xlmaker.valid_name("te.st.txt")
-        xlmaker.valid_name("Test . test ")
+        for invalid in INVALID_NAMES:
+            xlmaker.valid_name(invalid)
 
 def test_valid_names():
     """tests that valid names are indeed marked as valid"""
-    assert xlmaker.valid_name("test") is True
-    assert xlmaker.valid_name("Valid name") is True
+    for valid in VALID_NAMES:
+        assert xlmaker.valid_name(valid) is True
+
+def test_make_valid_name():
+    """tests that an excel document is created with the correct format"""
+    from openpyxl import Workbook
+    xlmaker.make(VALID_NAMES[0])
+    assert os.path.isfile(VALID_NAMES[0] + ".xlsx")
+
+def test_make_invalid_name():
+    """tests that file is not created if invalid name provided"""
+    xlmaker.make(INVALID_NAMES[0])
+    assert os.path.isfile(INVALID_NAMES[0] + ".xlsx") is False
+
+def test_make_correct_format():
+    """Tests that the document that is created has the correct format"""
+    pass

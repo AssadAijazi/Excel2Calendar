@@ -16,6 +16,14 @@ def make(file_name):
     @return: none (creates new file)
     """
     workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = "Events List"
+    worksheet['A1'] = "Event Name"
+    worksheet['B1'] = "Event Start Date"
+    worksheet['C1'] = "Event Start Time"
+    worksheet['D1'] = "Event End Date"
+    worksheet['E1'] = "Event End Time"
+    worksheet.column_dimensions['A'].width = 20
     try:
         if valid_name(file_name):
             workbook.save(file_name + ".xlsx")
